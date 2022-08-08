@@ -1,6 +1,6 @@
 local M = {
-	_NxGraphFilepath='./node_modules/.cache/nx.nvim/graph.json',
-	_NxGraph={}
+	_NxGraphFilepath = './node_modules/.cache/nx.nvim/graph.json',
+	_NxGraph = {}
 }
 
 local function read_file(path)
@@ -11,16 +11,14 @@ local function read_file(path)
 	return content
 end
 
-
-
 function M.NxGenerateGraph()
-	vim.fn.system("npx nx graph --file="..M._NxGraphFilepath)
-	M._NxGraph= vim.json.decode(read_file(M._NxGraphFilepath))
+	vim.fn.system("npx nx graph --file=" .. M._NxGraphFilepath)
+	M._NxGraph = vim.json.decode(read_file(M._NxGraphFilepath))
 end
 
 function M.NxGetProjects()
 	local r = {}
-	for proj,_ in pairs( M._NxGraph.graph.nodes ) do
+	for proj, _ in pairs(M._NxGraph.graph.nodes) do
 		table.insert(r, proj)
 	end
 	return r
@@ -32,9 +30,9 @@ function M.NxGetProjectTargets(project)
 		return {}
 	end
 	for target, t_data in pairs(M._NxGraph.graph.nodes[project].data.targets) do
-		if t_data.configurations ~=nil then
-			for config,_ in pairs(t_data.configurations) do
-				table.insert(targets,target..":"..config)
+		if t_data.configurations ~= nil then
+			for config, _ in pairs(t_data.configurations) do
+				table.insert(targets, target .. ":" .. config)
 			end
 		else
 			table.insert(targets, target)
@@ -48,12 +46,12 @@ function M.NxGetAllTargetsWithDetails()
 
 	for project, p_data in pairs(M._NxGraph.graph.nodes) do
 		for target, t_data in pairs(p_data.data.targets) do
-			if t_data.configurations ~=nil then
-				for config,_ in pairs(t_data.configurations) do
-					table.insert(targets_details,project..":"..target..":"..config)
+			if t_data.configurations ~= nil then
+				for config, _ in pairs(t_data.configurations) do
+					table.insert(targets_details, project .. ":" .. target .. ":" .. config)
 				end
 			else
-				table.insert(targets_details, project..":"..target)
+				table.insert(targets_details, project .. ":" .. target)
 			end
 		end
 	end
@@ -72,13 +70,33 @@ function M.NxGetProjectFiles(project)
 end
 
 function M.NxGetPlugins()
+	print("GET PLUGINS")
 	local cmd = "npx nx list | grep '(\\(executors\\)\\{0,1\\}[,]\\{0,1\\}\\(generators\\)\\{0,1\\})' | cut -d '(' -f 1 | sed 's/^ *//;s/ *$//'"
-	return vim.split(vim.fn.system(cmd),'\n')
+	return vim.split(vim.fn.system(cmd), '\n')
 end
 
 function M.NxGetPluginGenerators(plugin)
-	local cmd = "npx nx list "..plugin.." | grep -o '[a-zA-Z-]* : ' | sed -r 's/ : //g'"
-	return vim.split(vim.fn.system(cmd),'\n')
+	local cmd = "npx nx list " .. plugin .. " | grep -o '[a-zA-Z-]* : ' | sed -r 's/ : //g'"
+	return vim.split(vim.fn.system(cmd), '\n')
+end
+
+function M.NxGetGeneratorsOptions(plugin, runner)
+	local generator = plugin .. ":" .. runner
+	local cmd = 'npx nx g ' .. generator .. ' --help | grep -o "\\-\\-[a-zA-Z]*" | sed "s/--//"'
+	return vim.split(vim.fn.system(cmd), '\n')
+end
+
+function M.NxRunTarget(target)
+	vim.ui.input(
+		{
+			prompt = string.format('Run %s? [y/N] ', target),
+		},
+		function(input)
+			if vim.trim(input):lower() == 'y' then
+				vim.api.nvim_exec(":terminal npx nx run " .. target, false)
+			end
+		end
+	)
 end
 
 return M
