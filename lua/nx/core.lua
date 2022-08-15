@@ -3,6 +3,10 @@ local M = {
 	_NxGraph = {}
 }
 
+local function sortStrings(list)
+	table.sort(list, function(a, b) return a:upper() < b:upper() end)
+end
+
 local function read_file(path)
 	local file = io.open(path, "rb") -- r read mode and b binary mode
 	if not file then return nil end
@@ -17,11 +21,32 @@ function M.NxGenerateGraph()
 end
 
 function M.NxGetProjects()
-	local r = {}
+	local projects = {}
 	for proj, _ in pairs(M._NxGraph.graph.nodes) do
-		table.insert(r, proj)
+		table.insert(projects, proj)
 	end
-	return r
+	table.sort(projects, function(a, b)
+		local a_n = 0
+		local b_n = 0
+		if M._NxGraph.graph.nodes[a].type == "app" or
+			M._NxGraph.graph.nodes[a].type == "e2e"
+		then
+			a_n = a_n + 2
+		end
+		if M._NxGraph.graph.nodes[b].type == "app" or
+			M._NxGraph.graph.nodes[b].type == "e2e"
+		then
+			b_n = b_n + 2
+		end
+		if a:upper() < b:upper() then
+			a_n = a_n + 1
+		else
+			b_n = b_n + 1
+		end
+
+		return a_n > b_n
+	end)
+	return projects
 end
 
 function M.NxGetProjectTargets(project)
@@ -38,6 +63,7 @@ function M.NxGetProjectTargets(project)
 			table.insert(targets, target)
 		end
 	end
+	sortStrings(targets)
 	return targets
 end
 
@@ -55,6 +81,7 @@ function M.NxGetAllTargetsWithDetails()
 			end
 		end
 	end
+	sortStrings(targets_details)
 	return targets_details
 end
 
@@ -70,7 +97,6 @@ function M.NxGetProjectFiles(project)
 end
 
 function M.NxGetPlugins()
-	print("GET PLUGINS")
 	local cmd = "npx nx list | grep '(\\(executors\\)\\{0,1\\}[,]\\{0,1\\}\\(generators\\)\\{0,1\\})' | cut -d '(' -f 1 | sed 's/^ *//;s/ *$//'"
 	return vim.split(vim.fn.system(cmd), '\n')
 end
