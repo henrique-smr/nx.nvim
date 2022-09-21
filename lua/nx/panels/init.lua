@@ -10,11 +10,14 @@ function M.setup()
 			if panel == 'projects_targets' then
 				require('nx.panels.components.projects.targets').show()
 			end
+			if panel == 'generate_and_run' then
+				require('nx.panels.components.generate_and_run').show()
+			end
 		end,
 		{
 			nargs = 1,
 			complete = function()
-				return { "projects_targets" }
+				return { "projects_targets", "generate_and_run" }
 			end
 		}
 	)
