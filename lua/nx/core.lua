@@ -113,16 +113,16 @@ function M.NxGetGeneratorsOptions(plugin, runner)
 end
 
 function M.NxRunTarget(target)
-	vim.ui.input(
-		{
-			prompt = string.format('Run %s? [y/N] ', target),
-		},
-		function(input)
-			if vim.trim(input):lower() == 'y' then
-				vim.api.nvim_exec(":terminal npx nx run " .. target, false)
-			end
-		end
-	)
+	vim.api.nvim_exec(":terminal npx nx run " .. target, false)
+	-- vim.ui.input(
+	-- 	{
+	-- 		prompt = string.format('Run %s? [y/N] ', target),
+	-- 	},
+	-- 	function(input)
+	-- 		if vim.trim(input):lower() == 'y' then
+	-- 		end
+	-- 	end
+	-- )
 end
 
 return M
