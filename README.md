@@ -23,7 +23,7 @@ Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
 
 ```lua
 use { 
-	"ibhagwan/fzf-lua",
+	"henrique-smr/nx.nvim",
 	requires = {
 		"ibhagwan/fzf-lua",
 		"MunifTanjim/nui.nvim"
@@ -38,8 +38,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
 {
-	"ibhagwan/fzf-lua",
-	-- optional for icon support
+	"henrique-smr/nx.nvim",
 	dependencies = { 
 		"ibhagwan/fzf-lua",
 		"MunifTanjim/nui.nvim"
