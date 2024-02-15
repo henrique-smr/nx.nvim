@@ -15,7 +15,7 @@ Wanna help? Reach up with an issue
 
 ### Dependencies:
 - [ibhagwan/fzf-lua](https://github.com/ibhagwan/fzf-lua)
-- [ldelossa/litee.nvim](https://github.com/ldelossa/litee.nvim)
+- [MunifTanjim/nui.nvim](https://github.com/MunifTanjim/nui.nvim)
 
 ### Usage
 This plugin uses Nx's graph information to generate useful UI for interacting with its core functionality
