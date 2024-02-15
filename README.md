@@ -29,7 +29,7 @@ use {
 		"MunifTanjim/nui.nvim"
 	},
 	config = function()
-		require("nx.nvim").setup()
+		require("nx").setup()
 	end
 }
 ```
@@ -44,7 +44,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim)
 		"MunifTanjim/nui.nvim"
 	},
 	config = function()
-		require("nx.nvim").setup()
+		require("nx").setup()
 	end
 }
 ```
