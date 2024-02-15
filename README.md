@@ -9,7 +9,8 @@ This is my first plugin for neovim and a working in progress repository.
 My ideia is to have this as a core module that exposes lua functions to integrate with other plugins,
 like [fzf-lua](https://github.com/ibhagwan/fzf-lua) and [Telescope](https://github.com/nvim-telescope/telescope.nvim),through extension.
 
-For now, nx.nvim already includes a fzf-lua integration and [litee.nvim](https://github.com/ldelossa/litee.nvim) for creating side-panels
+For now, nx.nvim already includes a fzf-lua integration and [nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+ for creating side-panels
 
 Wanna help? Reach up with an issue
 
