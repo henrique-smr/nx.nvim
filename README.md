@@ -15,7 +15,41 @@ Wanna help? Reach up with an issue
 
 ### Dependencies:
 - [ibhagwan/fzf-lua](https://github.com/ibhagwan/fzf-lua)
-- [ldelossa/litee.nvim](https://github.com/ldelossa/litee.nvim)
+- [MunifTanjim/nui.nvim](https://github.com/MunifTanjim/nui.nvim)
+
+### Instalation:
+
+Using [packer.nvim](https://github.com/wbthomason/packer.nvim)
+
+```lua
+use { 
+	"ibhagwan/fzf-lua",
+	requires = {
+		"ibhagwan/fzf-lua",
+		"MunifTanjim/nui.nvim"
+	},
+	config = function()
+		require("nx.nvim").setup()
+	end
+}
+```
+
+Using [lazy.nvim](https://github.com/folke/lazy.nvim)
+
+```lua
+{
+	"ibhagwan/fzf-lua",
+	-- optional for icon support
+	dependencies = { 
+		"ibhagwan/fzf-lua",
+		"MunifTanjim/nui.nvim"
+	},
+	config = function()
+		require("nx.nvim").setup()
+	end
+}
+```
+
 
 ### Usage
 This plugin uses Nx's graph information to generate useful UI for interacting with its core functionality
@@ -39,7 +73,9 @@ The smart-picker is an fzf list of arguments with a preview window being the dry
 
 Selecting any argument will prompt a value that will set the current argument.
 
-For boolean values, a space will suffice
+For boolean values, a space will suffice.
+
+Typing `ctrl-r` will run the generator with the constructed argument list;
 
 #### `:NxFZFListAllTargets`
 
