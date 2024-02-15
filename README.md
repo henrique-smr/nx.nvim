@@ -39,7 +39,9 @@ The smart-picker is an fzf list of arguments with a preview window being the dry
 
 Selecting any argument will prompt a value that will set the current argument.
 
-For boolean values, a space will suffice
+For boolean values, a space will suffice.
+
+Typing `ctrl-r` will run the generator with the constructed argument list;
 
 #### `:NxFZFListAllTargets`
 
