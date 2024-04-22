@@ -17,7 +17,7 @@ function M.NxFZFListGeneratorOptions(plugin, runner)
 		end),
 		actions = {
 			["default"] = {
-				function(items)
+				fn = function(items)
 					local opt = string.gsub(items[1], "=.*", "")
 					vim.ui.input({ prompt = opt .. "" }, function(input)
 						if input ~= nil or input ~= "" then
@@ -28,7 +28,6 @@ function M.NxFZFListGeneratorOptions(plugin, runner)
 						fzf.resume()
 					end)
 				end,
-				-- fzf.actions.resume
 			},
 			["ctrl-r"] = function()
 				local cmd_str = "npx nx g " .. generator .. utils.parseOpts(opts)
