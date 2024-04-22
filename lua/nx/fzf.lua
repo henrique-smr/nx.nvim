@@ -16,25 +16,24 @@ function M.NxFZFListGeneratorOptions(plugin, runner)
 			return "echo '" .. cmd_preview_str .. "' && " .. cmd_preview_str
 		end),
 		actions = {
-			['default'] = {
+			["default"] = {
 				function(items)
 					local opt = string.gsub(items[1], "=.*", "")
-					vim.ui.input({
-						prompt = opt .. ""
-					}, function(input)
+					vim.ui.input({ prompt = opt .. "" }, function(input)
 						if input ~= nil or input ~= "" then
 							opts[opt] = input
 						else
 							opts[opt] = nil
 						end
+						fzf.resume()
 					end)
 				end,
-				fzf.actions.resume
+				-- fzf.actions.resume
 			},
-			['ctrl-r'] = function()
+			["ctrl-r"] = function()
 				local cmd_str = "npx nx g " .. generator .. utils.parseOpts(opts)
 				vim.api.nvim_exec(":split | terminal " .. cmd_str, false)
-			end
+			end,
 		},
 		fn_transform = function(x)
 			local opt = string.gsub(x, "=.*", "")
@@ -42,7 +41,7 @@ function M.NxFZFListGeneratorOptions(plugin, runner)
 				opt = opt .. "=" .. opts[opt]
 			end
 			return opt
-		end
+		end,
 	})
 end
 
@@ -54,15 +53,15 @@ function M.NxFZFListPluginGenerators(plugin)
 		preview = fzf.shell.raw_preview_action_cmd(function(items)
 			local runner = items[1]
 			local generator = plugin .. ":" .. runner
-			return 'npx nx g ' .. generator .. ' --help'
+			return "npx nx g " .. generator .. " --help"
 		end),
 		actions = {
-			['default'] = function(selected, opts)
+			["default"] = function(selected, opts)
 				local runner = selected[1]
 				M.NxFZFListGeneratorOptions(plugin, runner)
 				-- editNxCmd(selected, plugin)
-			end
-		}
+			end,
+		},
 	})
 end
 
@@ -73,10 +72,10 @@ function M.NxFZFListPlugins()
 		prompt = "Nx > ",
 		preview = "npx nx list {}",
 		actions = {
-			['default'] = function(selected, opts)
+			["default"] = function(selected, opts)
 				M.NxFZFListPluginGenerators(selected[1])
-			end
-		}
+			end,
+		},
 	})
 end
 
@@ -85,17 +84,15 @@ function M.NxFZFListProjectFiles(project)
 	core.NxGenerateGraph()
 	fzf.fzf_exec(function(fzf_cbc)
 		for _, file in ipairs(core.NxGetProjectFiles(project)) do
-			fzf_cbc(
-				fzf.make_entry.file(file, { file_icons = true, color_icons = true })
-			)
+			fzf_cbc(fzf.make_entry.file(file, { file_icons = true, color_icons = true }))
 		end
 		fzf_cbc()
 	end, {
 		prompt = "NX projects > " .. project .. " > ",
 		previewer = "builtin",
 		actions = {
-			['default'] = fzf.actions.file_edit,
-		}
+			["default"] = fzf.actions.file_edit,
+		},
 	})
 end
 
@@ -110,11 +107,11 @@ function M.NxFZFListProjects()
 	end, {
 		prompt = "NX projects > ",
 		actions = {
-			['default'] = function(items, opts)
+			["default"] = function(items, opts)
 				local proj = items[1]
 				M.NxFZFListProjectFiles(proj)
-			end
-		}
+			end,
+		},
 	})
 end
 
@@ -129,18 +126,18 @@ function M.NxFZFListAllTargets()
 	end, {
 		prompt = "NX run > ",
 		actions = {
-			['default'] = function(items, opts)
+			["default"] = function(items, opts)
 				local target = items[1]
 				core.NxRunTarget(target)
-			end
-		}
+			end,
+		},
 	})
 end
 
 function M.setup()
-	vim.api.nvim_create_user_command('NxFZFListPlugins', M.NxFZFListPlugins, {})
-	vim.api.nvim_create_user_command('NxFZFListProjects', M.NxFZFListProjects, {})
-	vim.api.nvim_create_user_command('NxFZFListAllTargets', M.NxFZFListAllTargets, {})
+	vim.api.nvim_create_user_command("NxFZFListPlugins", M.NxFZFListPlugins, {})
+	vim.api.nvim_create_user_command("NxFZFListProjects", M.NxFZFListProjects, {})
+	vim.api.nvim_create_user_command("NxFZFListAllTargets", M.NxFZFListAllTargets, {})
 end
 
 return M
